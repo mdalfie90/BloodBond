@@ -1,0 +1,1395 @@
+
+
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BloodBond - রক্তবন্ধন</title>
+
+<meta name="description" content="BloodBond একটি রক্তদান সচেতনতামূলক Demo Platform।">
+<meta name="theme-color" content="#c91e32">
+
+<!-- BloodBond Favicon -->
+<link rel="icon" type="image/svg+xml"
+href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cpath fill='%23e32636' d='M30 4C24 17 11 29 11 40a19 19 0 0 0 38 0C49 29 36 17 30 4Z'/%3E%3Cpath d='M30 24v19M21 33.5h18' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #fffafa;
+  color: #333;
+  line-height: 1.6;
+  transition: 0.3s;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+header {
+  background: #c91e32;
+  color: white;
+  padding: 14px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo svg {
+  width: 38px;
+  height: 38px;
+}
+
+#menuToggle {
+  display: none;
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 25px;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nav-menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-menu a:hover {
+  color: #ffe0e0;
+}
+
+.nav-menu button {
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+}
+
+#notificationButton {
+  position: relative;
+}
+
+#notificationDot {
+  display: none;
+  width: 9px;
+  height: 9px;
+  background: #ffdd00;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  right: 4px;
+}
+
+#notificationBox {
+  display: none;
+  position: absolute;
+  right: 15px;
+  top: 70px;
+  width: 280px;
+  max-width: calc(100vw - 30px);
+  padding: 18px;
+  background: white;
+  color: #333;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  z-index: 200;
+}
+
+#clearNotifications {
+  margin-top: 12px;
+  background: #e32636;
+  color: white;
+  border: 0;
+  border-radius: 7px;
+  padding: 9px 14px;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  color: white;
+  background: linear-gradient(135deg, #e32636, #8f0015);
+}
+
+.hero h1 {
+  font-size: 38px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.btn {
+  display: inline-block;
+  background: #e32636;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 9px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: #a90020;
+}
+
+.hero .btn {
+  background: white;
+  color: #c91e32;
+}
+
+section {
+  padding: 40px 20px;
+  margin: 20px auto;
+  max-width: 1100px;
+  text-align: center;
+}
+
+section h2 {
+  color: #c91e32;
+  margin-bottom: 22px;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  max-width: 650px;
+  margin: auto;
+}
+
+.group {
+  padding: 20px;
+  border: 2px solid #e32636;
+  border-radius: 12px;
+  background: white;
+  color: #c91e32;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.group:hover,
+.group.active {
+  background: #e32636;
+  color: white;
+}
+
+.search-box {
+  max-width: 550px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.search-box input,
+.search-box select,
+.search-box textarea,
+#contactMessage {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  background: white;
+  color: #333;
+}
+
+.search-box input:focus,
+.search-box select:focus,
+textarea:focus {
+  outline: 2px solid #e32636;
+}
+
+.empty {
+  color: #777;
+  margin: 15px 0;
+}
+
+.donor {
+  background: white;
+  border: 1px solid #ffd0d5;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 15px auto;
+  max-width: 550px;
+  text-align: left;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+}
+
+.donor h3 {
+  color: #c91e32;
+  margin-bottom: 8px;
+}
+
+.donor button {
+  background: #e32636;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.status {
+  color: #168447;
+  font-weight: bold;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+}
+
+.stat-card h3 {
+  color: #e32636;
+  font-size: 28px;
+}
+
+.about-section,
+.contact-section {
+  background: #fff0f0;
+  border-radius: 15px;
+}
+
+.about-card {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  margin: 15px auto;
+  max-width: 650px;
+}
+
+#contactMessage {
+  max-width: 550px;
+  min-height: 110px;
+  margin-bottom: 12px;
+}
+
+footer {
+  background: #8f0015;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  margin-top: 30px;
+}
+
+.creator-footer {
+  background: #65000e;
+  margin-top: 0;
+  overflow-wrap: anywhere;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+#pageLoader {
+  position: fixed;
+  inset: 0;
+  background: #c91e32;
+  color: white;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+#pageLoader.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.profile-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.profile-card {
+  position: relative;
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 25px;
+  border-radius: 16px;
+  text-align: center;
+  animation: profileShow 0.3s ease;
+}
+
+#closeProfile {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  background: #e32636;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 11px;
+}
+
+.profile-blood-badge {
+  display: inline-block;
+  background: #e32636;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 15px;
+}
+
+#profileDetails h3 {
+  color: #c91e32;
+  font-size: 23px;
+}
+
+#profileDetails p {
+  background: #fff0f0;
+  padding: 9px;
+  margin: 9px 0;
+  border-radius: 8px;
+}
+
+.profile-demo-label {
+  background: #fff0f0;
+  color: #b30000;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.registration-heading {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.registration-drop {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.registration-success {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 22px;
+  background: #eafaf0;
+  border: 1px solid #a8e6bf;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.registration-success h3 {
+  color: #168447;
+}
+
+.registration-success p {
+  margin: 8px;
+}
+
+#backToTop {
+  display: none;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #e32636;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  z-index: 300;
+}
+
+#backToTop.show {
+  display: block;
+}
+
+body.dark-mode {
+  background: #181818;
+  color: #eee;
+}
+
+body.dark-mode section h2 {
+  color: #ff6475;
+}
+
+body.dark-mode .donor,
+body.dark-mode .stat-card,
+body.dark-mode .about-card,
+body.dark-mode .profile-card,
+body.dark-mode #notificationBox {
+  background: #252525;
+  color: white;
+}
+
+body.dark-mode .search-box input,
+body.dark-mode .search-box select,
+body.dark-mode .search-box textarea,
+body.dark-mode #contactMessage {
+  background: #303030;
+  color: white;
+  border-color: #555;
+}
+
+body.dark-mode .about-section,
+body.dark-mode .contact-section,
+body.dark-mode #profileDetails p,
+body.dark-mode .profile-demo-label {
+  background: #303030;
+  color: white;
+}
+
+body.dark-mode .profile-demo-label {
+  color: #ff8793;
+}
+
+body.dark-mode .registration-success {
+  background: #20352a;
+  color: white;
+}
+
+body.dark-mode .registration-success h3 {
+  color: #7ce6a3;
+}
+
+body.dark-mode .group {
+  background: #252525;
+  color: #ff6475;
+}
+
+body.dark-mode .group.active,
+body.dark-mode .group:hover {
+  background: #e32636;
+  color: white;
+}
+
+.intro-section {
+  max-width: 900px;
+  margin: 25px auto;
+  padding: 25px;
+  line-height: 1.8;
+}
+
+.legal-section {
+  text-align: left;
+  background: white;
+  border: 1px solid #ffd0d5;
+  border-radius: 14px;
+  padding: 25px;
+}
+
+.legal-section h2 {
+  text-align: center;
+}
+
+.legal-section h3 {
+  color: #c91e32;
+  margin-top: 18px;
+}
+
+body.dark-mode .legal-section {
+  background: #252525;
+  color: white;
+}
+
+body.dark-mode .legal-section h3 {
+  color: #ff6475;
+}
+
+@keyframes profileShow {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media(max-width: 700px) {
+  #menuToggle {
+    display: block;
+  }
+
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: #a90020;
+    flex-direction: column;
+    padding: 20px;
+    align-items: stretch;
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .nav-menu a,
+  .nav-menu button {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .groups {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero {
+    padding: 50px 15px;
+  }
+
+  section {
+    padding: 28px 14px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .logo svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .profile-card {
+    padding: 18px;
+  }
+
+  .legal-section {
+    padding: 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="pageLoader">
+  <h1>🩸 BloodBond</h1>
+  <p>রক্তবন্ধন, জীবন রক্ষা</p>
+  <p>Loading...</p>
+</div>
+
+<header id="home">
+  <div class="logo">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 4C24 17 11 29 11 40a19 19 0 0 0 38 0C49 29 36 17 30 4Z" fill="white"/>
+      <path d="M30 24v19M21 33.5h18" stroke="#c91e32" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    BloodBond
+  </div>
+
+  <button id="menuToggle" type="button" aria-label="Menu">☰</button>
+
+  <nav class="nav-menu">
+    <a href="#home">Home</a>
+    <a href="#search">Find Donor</a>
+    <a href="#register">Demo Registration</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#terms">Terms</a>
+
+    <button type="button" id="notificationButton">
+      🔔 <span id="notificationCount">0</span>
+      <span id="notificationDot"></span>
+    </button>
+
+    <button type="button" id="themeToggle">🌙 Dark</button>
+  </nav>
+
+  <div id="notificationBox">
+    <p id="notificationMessage">কোনো নতুন Notification নেই।</p>
+    <button type="button" id="clearNotifications">Clear All</button>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>রক্ত দিন, জীবন বাঁচান</h1>
+  <p>BloodBond একটি রক্তদান সচেতনতামূলক Demo Platform।</p>
+  <a href="#search" class="btn">ডোনার খুঁজুন</a>
+</div>
+
+<section>
+  <h2>রক্তের গ্রুপ নির্বাচন করুন</h2>
+
+  <div class="groups">
+    <button class="group" data-group="A+">A+</button>
+    <button class="group" data-group="A-">A-</button>
+    <button class="group" data-group="B+">B+</button>
+    <button class="group" data-group="B-">B-</button>
+    <button class="group" data-group="O+">O+</button>
+    <button class="group" data-group="O-">O-</button>
+    <button class="group" data-group="AB+">AB+</button>
+    <button class="group" data-group="AB-">AB-</button>
+  </div>
+</section>
+
+<section id="search">
+  <h2>ডোনার খুঁজুন</h2>
+
+  <div class="search-box">
+    <input id="district" type="text" placeholder="জেলার নাম লিখুন">
+
+    <select id="blood">
+      <option value="">সব রক্তের গ্রুপ</option>
+      <option>A+</option>
+      <option>A-</option>
+      <option>B+</option>
+      <option>B-</option>
+      <option>O+</option>
+      <option>O-</option>
+      <option>AB+</option>
+      <option>AB-</option>
+    </select>
+
+    <button type="button" class="btn" id="searchButton">ডোনার খুঁজুন</button>
+    <button type="button" class="btn" id="resetButton">Reset Search</button>
+
+    <p id="loadingMessage" style="display:none;">ডেটা লোড হচ্ছে...</p>
+
+    <button type="button" class="btn" id="refreshButton">🔄 Refresh Data</button>
+  </div>
+</section>
+
+<section id="register">
+  <div class="registration-heading">
+    <div class="registration-drop">🩸</div>
+    <h2>Demo Registration</h2>
+    <p>এটি শুধু ওয়েবসাইট পরীক্ষার জন্য।</p>
+    <span>Demo তথ্য প্রকৃত ডোনার তথ্য নয়।</span>
+  </div>
+
+  <form id="donorForm" class="search-box">
+    <input type="text" id="donorName" placeholder="Demo নাম" required>
+
+    <select id="donorGroup" required>
+      <option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
+      <option>A+</option><option>A-</option>
+      <option>B+</option><option>B-</option>
+      <option>O+</option><option>O-</option>
+      <option>AB+</option><option>AB-</option>
+    </select>
+
+    <input type="text" id="donorDistrict" placeholder="Demo জেলা" required>
+<!-- Demo Phone Number -->
+<input
+  type="tel"
+  id="donorPhone"
+  placeholder="Demo Phone Number (01XXXXXXXXX)"
+  pattern="01[3-9][0-9]{8}"
+  maxlength="11"
+  inputmode="numeric"
+  required
+>
+
+<!-- Demo Address -->
+<input
+  type="text"
+  id="donorAddress"
+  placeholder="Demo Address (Area / City)"
+  maxlength="100"
+  required
+>
+    <select id="availability" required>
+      <option value="">Demo Availability</option>
+      <option value="Available">Available</option>
+      <option value="Unavailable">Unavailable</option>
+    </select>
+
+    <button type="submit" class="btn">Register Demo</button>
+    <button type="reset" class="btn">Clear Form</button>
+  </form>
+
+  <div id="registrationResult"></div>
+</section>
+
+<section id="donorList">
+  <h2>ডোনার তালিকা</h2>
+
+  <p id="filterSummary" class="empty">সব জেলার ও সব রক্তের গ্রুপ</p>
+
+  <div id="results">
+    <p class="empty">ডেটা লোড হচ্ছে...</p>
+  </div>
+</section>
+
+<section id="statistics">
+  <h2>📊 BloodBond Statistics</h2>
+
+  <div class="stats-container">
+    <div class="stat-card"><h3 id="totalDonors">0</h3><p>Total Demo Donors</p></div>
+    <div class="stat-card"><h3 id="aPositive">0</h3><p>A+</p></div>
+    <div class="stat-card"><h3 id="aNegative">0</h3><p>A-</p></div>
+    <div class="stat-card"><h3 id="bPositive">0</h3><p>B+</p></div>
+    <div class="stat-card"><h3 id="bNegative">0</h3><p>B-</p></div>
+    <div class="stat-card"><h3 id="oPositive">0</h3><p>O+</p></div>
+    <div class="stat-card"><h3 id="oNegative">0</h3><p>O-</p></div>
+    <div class="stat-card"><h3 id="abPositive">0</h3><p>AB+</p></div>
+    <div class="stat-card"><h3 id="abNegative">0</h3><p>AB-</p></div>
+  </div>
+</section>
+
+<section id="about" class="about-section">
+  <h2>আমাদের সম্পর্কে</h2>
+
+  <div class="intro-section">
+    <p>
+      BloodBond একটি রক্তদান সচেতনতামূলক Demo Platform।
+      আমাদের উদ্দেশ্য হলো রক্তদান সম্পর্কে সচেতনতা বৃদ্ধি
+      এবং প্রযুক্তির মাধ্যমে সহযোগিতার মনোভাব তৈরি করা।
+    </p>
+  </div>
+
+  <div class="about-card">
+    <h3>🎯 আমাদের লক্ষ্য</h3>
+    <p>সহজ ও তথ্যভিত্তিক Demo অভিজ্ঞতা দেওয়া।</p>
+  </div>
+
+  <div class="about-card">
+    <h3>❤️ আমাদের উদ্দেশ্য</h3>
+    <p>রক্তদান সম্পর্কে সচেতনতা বৃদ্ধি করা।</p>
+  </div>
+
+  <p><strong>BloodBond — রক্তবন্ধন, জীবন রক্ষা।</strong></p>
+  <p>এটি Demo Project। এখানে প্রকৃত ডোনারের তথ্য নেই।</p>
+</section>
+
+<section id="contact" class="contact-section">
+  <h2>📩 Contact Us</h2>
+  <p>BloodBond সম্পর্কে মতামত লিখুন।</p>
+
+  <textarea id="contactMessage" placeholder="তোমার Message লিখুন..."></textarea>
+
+  <br><br>
+
+  <button type="button" class="btn" id="sendMessageButton">
+    Send Demo Message
+  </button>
+
+  <div id="contactResult"></div>
+</section>
+
+<section id="privacy" class="legal-section">
+  <h2>Privacy Policy</h2>
+
+  <h3>১. Demo তথ্য</h3>
+  <p>এই ওয়েবসাইটটি বর্তমানে একটি Demo Project। এখানে প্রদর্শিত Donor তথ্য Demo Data, বাস্তব ডোনারের তথ্য নয়।</p>
+
+  <h3>২. ব্যক্তিগত তথ্য</h3>
+  <p>অনুমতি ছাড়া কারও নাম, ফোন নম্বর, ঠিকানা বা স্বাস্থ্যসংক্রান্ত তথ্য প্রকাশ করা উচিত নয়।</p>
+
+  <h3>৩. তথ্যের নিরাপত্তা</h3>
+  <p>বাস্তব তথ্য ব্যবহারের আগে যথাযথ নিরাপত্তা, অনুমতি ও তথ্য সুরক্ষার ব্যবস্থা করতে হবে।</p>
+
+  <h3>৪. তৃতীয় পক্ষের সেবা</h3>
+  <p>Supabase-এর মতো তৃতীয় পক্ষের সেবা ব্যবহৃত হলে তাদের নিজস্ব Privacy Policy-ও প্রযোজ্য হতে পারে।</p>
+
+  <h3>৫. যোগাযোগ</h3>
+  <p>Privacy সংক্রান্ত প্রশ্নের জন্য ওয়েবসাইট পরিচালনাকারীর সঙ্গে যোগাযোগ করুন।</p>
+</section>
+
+<section id="terms" class="legal-section">
+  <h2>Terms & Conditions</h2>
+
+  <h3>১. Demo Platform</h3>
+  <p>BloodBond বর্তমানে একটি Demo Project। এখানে দেখানো Donor তথ্য বাস্তব নয়।</p>
+
+  <h3>২. চিকিৎসা সংক্রান্ত পরামর্শ</h3>
+  <p>BloodBond কোনো চিকিৎসা সেবা বা চিকিৎসকের পরামর্শ প্রদান করে না। রক্তদান বা রক্ত গ্রহণের বিষয়ে যোগ্য চিকিৎসকের পরামর্শ নিতে হবে।</p>
+
+  <h3>৩. তথ্যের ব্যবহার</h3>
+  <p>Demo Data-কে বাস্তব Donor হিসেবে ব্যবহার বা প্রচার করা যাবে না।</p>
+
+  <h3>৪. ভবিষ্যৎ সেবা</h3>
+  <p>বাস্তব Donor সেবা চালুর আগে প্রয়োজনীয় অনুমতি, নিরাপত্তা, যাচাই এবং প্রযোজ্য আইন মেনে চলতে হবে।</p>
+
+  <h3>৫. শর্ত পরিবর্তন</h3>
+  <p>প্রয়োজন অনুযায়ী এই শর্তাবলি পরিবর্তন করা হতে পারে।</p>
+</section>
+
+<footer>
+  <h2>🩸 BloodBond</h2>
+  <p>রক্তবন্ধন, জীবন রক্ষা</p>
+  <p>Demo Project — Not a real donor service</p>
+
+  <div class="footer-links">
+    <a href="#privacy">Privacy Policy</a>
+    <span>|</span>
+    <a href="#terms">Terms & Conditions</a>
+  </div>
+
+  <p>© 2026 BloodBond. All rights reserved.</p>
+</footer>
+
+<footer class="creator-footer">
+  <h3>Website Creator</h3>
+  <p>BloodBond Demo Website</p>
+</footer>
+
+<button id="backToTop" type="button" aria-label="Back to top">↑</button>
+
+<!-- Donor Profile Popup -->
+<div id="profileModal" class="profile-modal">
+  <div class="profile-card">
+    <button id="closeProfile" type="button">✖</button>
+    <h2>🩸 Donor Profile</h2>
+    <div id="profileDetails"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ===================================
+// SUPABASE CONNECTION
+// ===================================
+
+const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+const SUPABASE_KEY = "sb_publishable_oF5Og7Z1f6Pmc6OhXM3rUQ_tHhF5ydg";
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let demoDonors = [];
+let displayedDonors = [];
+
+// ===================================
+// SAFE HTML
+// ===================================
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+// ===================================
+// STATISTICS
+// ===================================
+
+function updateStatistics() {
+  const groups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
+
+  document.getElementById("totalDonors").textContent =
+    demoDonors.length;
+
+  const ids = {
+    "A+": "aPositive",
+    "A-": "aNegative",
+    "B+": "bPositive",
+    "B-": "bNegative",
+    "O+": "oPositive",
+    "O-": "oNegative",
+    "AB+": "abPositive",
+    "AB-": "abNegative"
+  };
+
+  groups.forEach(group => {
+    const count = demoDonors.filter(donor =>
+      String(donor.group ?? "").trim().toUpperCase() === group
+    ).length;
+
+    document.getElementById(ids[group]).textContent = count;
+  });
+}
+
+// ===================================
+// LOAD DONORS FROM SUPABASE
+// ===================================
+
+async function loadDonors() {
+  const results = document.getElementById("results");
+  const loading = document.getElementById("loadingMessage");
+
+  loading.style.display = "block";
+  results.innerHTML = '<p class="empty">ডেটা লোড হচ্ছে...</p>';
+
+  try {
+    const { data, error } = await db
+      .from("demo_donors")
+      .select("Name,Blood_group,District,Availability");
+
+    if (error) throw error;
+
+    demoDonors = (data || []).map(row => ({
+      name: row.Name ?? "Demo Donor",
+      group: row.Blood_group ?? "",
+      district: row.District ?? "",
+      availability: row.Availability ?? "Unavailable"
+    }));
+
+    updateStatistics();
+    searchDonors();
+
+  } catch (error) {
+    console.error("Supabase Error:", error);
+
+    demoDonors = [];
+    displayedDonors = [];
+
+    updateStatistics();
+
+    results.innerHTML =
+      '<p class="empty">Database থেকে তথ্য আনা যায়নি। Supabase URL, Publishable Key ও RLS পরীক্ষা করো।</p>';
+
+  } finally {
+    loading.style.display = "none";
+  }
+}
+
+// ===================================
+// SEARCH DONORS
+// ===================================
+
+function searchDonors() {
+  const district = document.getElementById("district")
+    .value.trim().toLowerCase();
+
+  const blood = document.getElementById("blood")
+    .value.trim().toUpperCase();
+
+  const filtered = demoDonors.filter(donor => {
+    const group = String(donor.group ?? "")
+      .trim().toUpperCase();
+
+    const area = String(donor.district ?? "")
+      .trim().toLowerCase();
+
+    const status = String(donor.availability ?? "")
+      .trim().toLowerCase();
+
+    return (
+      (!blood || group === blood) &&
+      (!district || area.includes(district)) &&
+      status === "available"
+    );
+  });
+
+  displayedDonors = filtered;
+
+  document.getElementById("filterSummary").textContent =
+    "জেলা: " + (district || "সব জেলা") +
+    " | রক্তের গ্রুপ: " + (blood || "সব গ্রুপ") +
+    " | পাওয়া গেছে: " + filtered.length + " জন";
+
+  const results = document.getElementById("results");
+
+  if (filtered.length === 0) {
+    results.innerHTML =
+      '<p class="empty">কোনো Available Demo Donor পাওয়া যায়নি।</p>';
+    return;
+  }
+
+  results.innerHTML =
+    '<p class="empty">মোট ' + filtered.length +
+    ' জন Demo Donor পাওয়া গেছে।</p>' +
+
+    filtered.map((donor, index) => `
+      <div class="donor">
+        <h3>${escapeHTML(donor.group)} Blood Group</h3>
+        <p>Name: ${escapeHTML(donor.name)}</p>
+        <p>জেলা: ${escapeHTML(donor.district)}</p>
+        <p class="status">● ${escapeHTML(donor.availability)}</p>
+        <p>Demo Donor — প্রকৃত ডোনার নয়</p>
+
+        <button type="button" onclick="showDonorProfile(${index})">
+          View Profile
+        </button>
+      </div>
+    `).join("");
+}
+
+// ===================================
+// DONOR PROFILE
+// ===================================
+
+function showDonorProfile(index) {
+  const donor = displayedDonors[index];
+  if (!donor) return;
+
+  document.getElementById("profileDetails").innerHTML = `
+    <div class="profile-blood-badge">
+      🩸 ${escapeHTML(donor.group)}
+    </div>
+
+    <h3>${escapeHTML(donor.name)}</h3>
+    <p>📍 District: ${escapeHTML(donor.district)}</p>
+    <p>🟢 Status: ${escapeHTML(donor.availability)}</p>
+
+    <div class="profile-demo-label">
+      Demo Donor — প্রকৃত ডোনার নয়
+    </div>
+  `;
+
+  document.getElementById("profileModal").style.display = "flex";
+}
+
+// ===================================
+// SEARCH, REFRESH, RESET
+// ===================================
+
+document.getElementById("searchButton")
+  .addEventListener("click", function() {
+    searchDonors();
+
+    document.getElementById("donorList")
+      .scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+document.getElementById("refreshButton")
+  .addEventListener("click", loadDonors);
+
+document.getElementById("resetButton")
+  .addEventListener("click", function() {
+    document.getElementById("district").value = "";
+    document.getElementById("blood").value = "";
+
+    document.querySelectorAll(".group").forEach(button => {
+      button.classList.remove("active");
+    });
+
+    searchDonors();
+  });
+
+// ===================================
+// LIVE SEARCH & BLOOD GROUP BUTTONS
+// ===================================
+
+document.getElementById("district")
+  .addEventListener("input", searchDonors);
+
+document.getElementById("blood")
+  .addEventListener("change", function() {
+    document.querySelectorAll(".group").forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.group === this.value
+      );
+    });
+
+    searchDonors();
+  });
+
+document.querySelectorAll(".group").forEach(button => {
+  button.addEventListener("click", function() {
+    const group = this.dataset.group;
+
+    document.getElementById("blood").value = group;
+
+    document.querySelectorAll(".group").forEach(item => {
+      item.classList.toggle("active", item === this);
+    });
+
+    searchDonors();
+
+    document.getElementById("search")
+      .scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// ===================================
+// DEMO REGISTRATION
+// ===================================
+
+document.getElementById("donorForm")
+  .addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("donorName").value.trim();
+    const group = document.getElementById("donorGroup").value;
+    const district = document.getElementById("donorDistrict").value.trim();
+    const phone = document.getElementById("donorPhone").value.trim();
+    const address = document.getElementById("donorAddress").value.trim();
+    const availability = document.getElementById("availability").value;
+
+    // Bangladesh mobile number format validation
+    if (!/^01[3-9]\d{8}$/.test(phone)) {
+      alert("সঠিক ১১ digit Demo Phone Number লিখুন।");
+      return;
+    }
+
+    if (!address) {
+      alert("Demo Address লিখুন।");
+      return;
+    }
+
+    document.getElementById("registrationResult").innerHTML = `
+      <div class="registration-success">
+        <h3>✅ Demo Registration সফল!</h3>
+
+        <p>নাম: ${escapeHTML(name)}</p>
+        <p>রক্তের গ্রুপ: ${escapeHTML(group)}</p>
+        <p>জেলা: ${escapeHTML(district)}</p>
+        <p>Availability: ${escapeHTML(availability)}</p>
+
+        <p>📱 Demo Phone: ${escapeHTML(phone)}</p>
+        <p>📍 Demo Address: ${escapeHTML(address)}</p>
+
+        <p>
+          ব্যক্তিগত তথ্য এখানে প্রদর্শন বা সংরক্ষণ করা হয়নি।
+        </p>
+
+        <p>
+          এটি Demo Registration। প্রকৃত Donor Registration নয়।
+        </p>
+
+        <button type="button" class="btn"
+          onclick="document.getElementById('donorForm').scrollIntoView({behavior:'smooth'});">
+          Register Another Demo
+        </button>
+      </div>
+    `;
+
+    this.reset();
+  });
+
+// ===================================
+// DEMO CONTACT MESSAGE
+// ===================================
+
+document.getElementById("sendMessageButton")
+  .addEventListener("click", function() {
+    const message = document.getElementById("contactMessage")
+      .value.trim();
+
+    const result = document.getElementById("contactResult");
+
+    if (!message) {
+      result.textContent = "আগে একটি Message লিখুন।";
+      return;
+    }
+
+    result.textContent =
+      "ধন্যবাদ! এটি Demo Message। কোথাও পাঠানো বা সংরক্ষণ করা হয়নি।";
+
+    document.getElementById("contactMessage").value = "";
+  });
+
+// ===================================
+// DARK MODE
+// ===================================
+
+document.getElementById("themeToggle")
+  .addEventListener("click", function() {
+    document.body.classList.toggle("dark-mode");
+
+    this.textContent =
+      document.body.classList.contains("dark-mode")
+      ? "☀️ Light"
+      : "🌙 Dark";
+  });
+
+// ===================================
+// MOBILE MENU
+// ===================================
+
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.querySelector(".nav-menu");
+
+menuToggle.addEventListener("click", function() {
+  navMenu.classList.toggle("open");
+
+  this.textContent =
+    navMenu.classList.contains("open") ? "✕" : "☰";
+});
+
+document.querySelectorAll(".nav-menu a").forEach(link => {
+  link.addEventListener("click", function() {
+    navMenu.classList.remove("open");
+    menuToggle.textContent = "☰";
+  });
+});
+
+// ===================================
+// NOTIFICATIONS
+// ===================================
+
+const notificationButton = document.getElementById("notificationButton");
+const notificationBox = document.getElementById("notificationBox");
+const notificationCount = document.getElementById("notificationCount");
+const notificationDot = document.getElementById("notificationDot");
+const notificationMessage = document.getElementById("notificationMessage");
+
+let demoNotifications = 0;
+
+notificationButton.addEventListener("click", function() {
+  notificationBox.style.display =
+    notificationBox.style.display === "block"
+    ? "none"
+    : "block";
+});
+
+function addDemoNotification() {
+  demoNotifications++;
+
+  notificationCount.textContent = demoNotifications;
+  notificationDot.style.display = "block";
+
+  notificationMessage.textContent =
+    "🎉 নতুন Demo Notification! মোট " +
+    demoNotifications + " টি";
+}
+
+addDemoNotification();
+
+document.getElementById("clearNotifications")
+  .addEventListener("click", function() {
+    demoNotifications = 0;
+
+    notificationCount.textContent = "0";
+    notificationDot.style.display = "none";
+
+    notificationMessage.textContent =
+      "সব Notification মুছে ফেলা হয়েছে!";
+  });
+
+// ===================================
+// PROFILE POPUP CLOSE
+// ===================================
+
+const profileModal = document.getElementById("profileModal");
+
+document.getElementById("closeProfile")
+  .addEventListener("click", function() {
+    profileModal.style.display = "none";
+  });
+
+profileModal.addEventListener("click", function(event) {
+  if (event.target === profileModal) {
+    profileModal.style.display = "none";
+  }
+});
+
+// ===================================
+// BACK TO TOP
+// ===================================
+
+const backToTop = document.getElementById("backToTop");
+
+window.addEventListener("scroll", function() {
+  if (window.scrollY > 300) {
+    backToTop.classList.add("show");
+  } else {
+    backToTop.classList.remove("show");
+  }
+});
+
+backToTop.addEventListener("click", function() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// ===================================
+// LOADING ANIMATION
+// ===================================
+
+window.addEventListener("load", function() {
+  setTimeout(function() {
+    document.getElementById("pageLoader").classList.add("hide");
+  }, 1500);
+});
+
+// ===================================
+// START WEBSITE
+// ===================================
+
+loadDonors();
+
+</script>
+
+</body>
+</html>
+
+
